@@ -1,4 +1,7 @@
 import React from 'react';
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+import './App.css';
 
 const App = () => (
   <h1>
