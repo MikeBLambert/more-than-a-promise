@@ -1,45 +1,18 @@
-import React, { useEffect, useState } from 'react';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-import './App.css';
-import { fetchSuggestions } from '../api/wikipedia';
+import React from 'react';
+import { Provider } from 'react-redux';
+import store from '../redux';
 import SearchField from './SearchField';
 import Suggestions from './Suggestions';
 
-const App = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [query, setQuery] = useState('');
-  const [suggestions, setSuggestions] = useState([]);
-
-  const doSearch = async (searchQuery) => {
-    try {
-      const response = await fetchSuggestions(searchQuery);
-      if (response && response[1]) setSuggestions(response[1]);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    doSearch(query);
-  }, [query]);
-
-  const handleChange = ({ target: { value } }) => setQuery(value);
-
-  return (
+const App = () => (
+  <Provider store={store}>
     <div>
-
-      <SearchField value={query} onChange={handleChange} />
-      <Suggestions
-        isLoading={isLoading}
-        suggestions={suggestions}
-        query={query}
-        onClick={setQuery}
-      />
+      <SearchField />
+      <Suggestions />
     </div>
-  );
-};
+  </Provider>
+);
 
 export default App;

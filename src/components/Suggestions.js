@@ -1,36 +1,28 @@
 import React from 'react';
-import {
-  arrayOf, bool, func, string,
-} from 'prop-types';
 import { CircularProgress, List, ListItem } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { getIsLoading, getQuery, getSuggestions } from '../redux/selectors';
+import { updateQuery } from '../redux/actions';
 
-const Suggestions = ({
-  isLoading, query, suggestions, onClick,
-}) => (isLoading
-  ? <CircularProgress /> : (
-    <List>
-      {suggestions.map((suggestion) => query !== suggestion && (
+const Suggestions = () => {
+  const dispatch = useDispatch();
+  const isLoading = useSelector(getIsLoading);
+  const query = useSelector(getQuery);
+  const suggestions = useSelector(getSuggestions);
+
+  return isLoading
+    ? <CircularProgress /> : (
+      <List>
+        {suggestions.map((suggestion) => query !== suggestion && (
         <ListItem
           key={suggestion}
-          onClick={() => onClick(suggestion)}
+          onClick={() => dispatch(updateQuery(suggestion))}
         >
           {suggestion}
         </ListItem>
-      ))}
-    </List>
-  ));
-
-Suggestions.propTypes = {
-  isLoading: bool,
-  onClick: func.isRequired,
-  query: string,
-  suggestions: arrayOf(string),
-};
-
-Suggestions.defaultProps = {
-  isLoading: false,
-  query: '',
-  suggestions: [],
+        ))}
+      </List>
+    );
 };
 
 export default Suggestions;
